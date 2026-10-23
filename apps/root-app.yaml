@@ -6,7 +6,7 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: 'https://github.com/yuliakhudenko/my-project-gitops.git' # Перевір своє ім'я на GitHub
+    repoURL: 'https://github.com/geyders/my-project-gitops.git' # Перевір, щоб тут було написано geyders!
     targetRevision: HEAD
     path: charts/my-app
     helm:
