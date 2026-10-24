@@ -1,0 +1,39 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-mongo
+  labels:
+    app: {{ .Release.Name }}-mongo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}-mongo
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}-mongo
+    spec:
+      containers:
+        - name: mongo
+          image: mongo:7
+          ports:
+            - containerPort: 27017
+          volumeMounts:
+            - name: data
+              mountPath: /data/db
+      volumes:
+        - name: data
+          emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ .Release.Name }}-mongo
+spec:
+  type: ClusterIP
+  ports:
+    - port: 27017
+      targetPort: 27017
+  selector:
+    app: {{ .Release.Name }}-mongo
