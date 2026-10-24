@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: yuliakhudenko/my-app
-  tag: "v9.9.9"
+  tag: "v1.1.0"
 
 service:
   type: NodePort
