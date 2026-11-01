@@ -5,7 +5,7 @@ rollout:
 
 image:
   repository: yuliakhudenko/my-app
-  tag: "v1.2.0"
+  tag: "v1.3.0"
 
 service:
   type: NodePort
