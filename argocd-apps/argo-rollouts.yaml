@@ -15,8 +15,6 @@ spec:
       valuesObject:
         dashboard:
           enabled: true
-          extraArgs:
-            - --namespaced=false
         installCRDs: true
   destination:
     server: 'https://kubernetes.default.svc'
