@@ -12,9 +12,10 @@ spec:
     chart: argo-rollouts
     targetRevision: 2.*
     helm:
-      values: |
+      valuesObject:
         dashboard:
           enabled: true
+        installCRDs: true
   destination:
     server: 'https://kubernetes.default.svc'
     namespace: argo-rollouts
@@ -25,3 +26,4 @@ spec:
     syncOptions:
       - CreateNamespace=true
       - ServerSideApply=true
+      - SkipDryRunOnMissingResource=true
