@@ -1,0 +1,36 @@
+{{- if .Values.rollout.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Rollout
+metadata:
+  name: {{ include "my-app.fullname" . | default .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  revisionHistoryLimit: 3
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  strategy:
+    canary:
+      steps:
+        {{- toYaml .Values.rollout.steps | nindent 8 }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.service.targetPort }}
+          env:
+            - name: APP_VERSION
+              value: {{ .Values.image.tag | quote }}
+            - name: PORT
+              value: {{ .Values.service.targetPort | quote }}
+            - name: MONGO_URL
+              value: "mongodb://{{ .Release.Name }}-mongo:27017/task_manager"
+{{- end }}

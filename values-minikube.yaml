@@ -1,8 +1,11 @@
-replicaCount: 2
+replicaCount: 4
+
+rollout:
+  enabled: true
 
 image:
   repository: yuliakhudenko/my-app
-  tag: "v1.0.1"
+  tag: "v1.1.0"
 
 service:
   type: NodePort
