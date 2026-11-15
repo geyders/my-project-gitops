@@ -33,4 +33,6 @@ spec:
               value: {{ .Values.service.targetPort | quote }}
             - name: MONGO_URL
               value: "mongodb://{{ .Release.Name }}-mongo:27017/task_manager"
+            - name: FAIL_RATE
+              value: {{ .Values.failRate | default "0" | quote }}
 {{- end }}
