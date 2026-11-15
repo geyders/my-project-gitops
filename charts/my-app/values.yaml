@@ -21,3 +21,7 @@ rollout:
     - pause: {}
     - setWeight: 75
     - pause: {duration: 20s}
+    
+metrics:
+  enabled: false
+  path: /metrics
