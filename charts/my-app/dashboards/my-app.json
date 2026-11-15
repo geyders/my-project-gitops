@@ -1,0 +1,66 @@
+{
+  "title": "my-app",
+  "uid": "my-app",
+  "schemaVersion": 39,
+  "version": 1,
+  "refresh": "10s",
+  "time": { "from": "now-15m", "to": "now" },
+  "panels": [
+    {
+      "id": 1, "type": "timeseries", "title": "Запити за секунду (RPS)",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "targets": [ { "refId": "A", "legendFormat": "{{status}}",
+        "expr": "sum by (status) (rate(http_requests_total{namespace=\"default\"}[1m]))" } ]
+    },
+    {
+      "id": 2, "type": "timeseries", "title": "Частка помилок 5xx",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 0 },
+      "fieldConfig": { "defaults": { "unit": "percentunit", "min": 0, "max": 1 }, "overrides": [] },
+      "targets": [ { "refId": "A", "legendFormat": "5xx",
+        "expr": "(sum(rate(http_requests_total{namespace=\"default\",status=~\"5..\"}[1m])) or vector(0)) / sum(rate(http_requests_total{namespace=\"default\"}[1m]))" } ]
+    },
+    {
+      "id": 3, "type": "timeseries", "title": "p95 затримки",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "s" }, "overrides": [] },
+      "targets": [ { "refId": "A", "legendFormat": "p95",
+        "expr": "histogram_quantile(0.95, sum by (le) (rate(http_request_duration_seconds_bucket{namespace=\"default\"}[1m])))" } ]
+    },
+    {
+      "id": 4, "type": "timeseries", "title": "5xx по подах",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 8 },
+      "fieldConfig": { "defaults": { "unit": "reqps" }, "overrides": [] },
+      "targets": [ { "refId": "A", "legendFormat": "{{pod}}",
+        "expr": "sum by (pod) (rate(http_requests_total{namespace=\"default\",status=~\"5..\"}[1m]))" } ]
+    },
+    {
+      "id": 5, "type": "timeseries", "title": "CPU по подах",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 0, "y": 16 },
+      "fieldConfig": { "defaults": { "unit": "cores" }, "overrides": [] },
+      "targets": [ { "refId": "A", "legendFormat": "{{pod}}",
+        "expr": "sum by (pod) (rate(container_cpu_usage_seconds_total{namespace=\"default\",container!=\"\"}[1m]))" } ]
+    },
+    {
+      "id": 6, "type": "timeseries", "title": "Пам'ять по подах",
+      "datasource": { "type": "prometheus", "uid": "prometheus" },
+      "gridPos": { "h": 8, "w": 12, "x": 12, "y": 16 },
+      "fieldConfig": { "defaults": { "unit": "bytes" }, "overrides": [] },
+      "targets": [ { "refId": "A", "legendFormat": "{{pod}}",
+        "expr": "sum by (pod) (container_memory_working_set_bytes{namespace=\"default\",container!=\"\"})" } ]
+    },
+    {
+      "id": 7, "type": "logs", "title": "Логи помилок (Loki)",
+      "datasource": { "type": "loki", "uid": "loki" },
+      "gridPos": { "h": 9, "w": 24, "x": 0, "y": 24 },
+      "options": { "showTime": true, "wrapLogMessage": true, "sortOrder": "Descending" },
+      "targets": [ { "refId": "A",
+        "expr": "{namespace=\"default\"} | json | level=\"error\"" } ]
+    }
+  ]
+}
