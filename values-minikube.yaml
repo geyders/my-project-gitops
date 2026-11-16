@@ -1,6 +1,6 @@
 replicaCount: 4
 
-failRate: "0"
+failRate: "0.5"
 
 rollout:
   enabled: true
@@ -20,7 +20,7 @@ metrics:
 
 image:
   repository: yuliakhudenko/my-app
-  tag: "v1.4.1"
+  tag: "v1.5.0"
 
 service:
   type: NodePort
